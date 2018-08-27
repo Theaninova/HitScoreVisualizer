@@ -14,6 +14,27 @@ namespace HitScoreVisualizer
     {
         public static Config instance;
 
+        public const string mode_format = "format";
+        public const string mode_textOnly = "textOnly";
+        public const string mode_numeric = "numeric";
+        public const string mode_scoreOnTop = "scoreOnTop";
+
+        public const char format_indicator = '%';
+        public const char format_beforeCutScore = 'b';
+        public const char format_accuracyScore = 'c';
+        public const char format_afterCutScore = 'a';
+        public const char FORMAT_BEFORECUTSCORE = 'B';
+        public const char FORMAT_ACCUTRACYSCORE = 'C';
+        public const char FORMAT_AFTERCUTSCORE = 'A';
+        public const char format_score = 's';
+        public const char format_indicatorChar = format_indicator;
+        public const char format_lineBreak = 'n';
+
+        public const bool percentages = true;
+        public const int maxBeforeCutScore = 70;
+        public const int maxAfterCutScore = 30;
+        public const int maxAccuracyScore = 10;
+
         // If true, this config will not overwrite the existing config file.
         // (This gets set if a config from a newer version is detected.)
         [JsonIgnore]
@@ -365,7 +386,7 @@ namespace HitScoreVisualizer
                 color = toColor(judgment.color);
             }
 
-            if (instance.displayMode == "format")
+            if (instance.displayMode == mode_format)
             {
                 int beforeCutScore, accuracyScore, afterCutScore;
 
@@ -380,7 +401,7 @@ namespace HitScoreVisualizer
 
                 StringBuilder formattedBuilder = new StringBuilder();
                 string formatString = judgment.text;
-                int nextPercentIndex = formatString.IndexOf('%');
+                int nextPercentIndex = formatString.IndexOf(format_indicator);
                 while (nextPercentIndex != -1)
                 {
                     formattedBuilder.Append(formatString.Substring(0, nextPercentIndex));
@@ -392,62 +413,54 @@ namespace HitScoreVisualizer
 
                     switch (specifier)
                     {
-                        case 'b':
+                        case format_beforeCutScore:
                             formattedBuilder.Append(beforeCutScore);
                             break;
-                        case 'c':
+                        case format_accuracyScore:
                             formattedBuilder.Append(accuracyScore);
                             break;
-                        case 'a':
+                        case format_afterCutScore:
                             formattedBuilder.Append(afterCutScore);
                             break;
-                        case 'B':
+                        case FORMAT_BEFORECUTSCORE:
                             formattedBuilder.Append(judgeSegment(beforeCutScore, instance.beforeCutAngleJudgments));
                             break;
-                        case 'C':
+                        case FORMAT_ACCUTRACYSCORE:
                             formattedBuilder.Append(judgeSegment(accuracyScore, instance.accuracyJudgments));
                             break;
-                        case 'A':
+                        case FORMAT_AFTERCUTSCORE:
                             formattedBuilder.Append(judgeSegment(afterCutScore, instance.afterCutAngleJudgments));
                             break;
-                        case 's':
+                        case format_score:
                             formattedBuilder.Append(score);
                             break;
-                        case '%':
-                            formattedBuilder.Append("%");
+                        case format_indicatorChar:
+                            formattedBuilder.Append(format_indicatorChar);
                             break;
-                        case 'n':
+                        case format_lineBreak:
                             formattedBuilder.Append("\n");
                             break;
                         default:
-                            formattedBuilder.Append("%" + specifier);
+                            formattedBuilder.Append(format_indicator + specifier);
                             break;
                     }
 
                     formatString = formatString.Remove(0, nextPercentIndex + 2);
-                    nextPercentIndex = formatString.IndexOf('%');
+                    nextPercentIndex = formatString.IndexOf(format_indicator);
                 }
                 formattedBuilder.Append(formatString);
 
                 text.text = formattedBuilder.ToString();
                 return;
             }
-
-            if (instance.displayMode == "textOnly")
-            {
+            else if (instance.displayMode == mode_textOnly)
                 text.text = judgment.text;
+            else if (instance.displayMode == mode_numeric)
                 return;
-            }
-            if (instance.displayMode == "numeric")
-            {
-                return;
-            }
-            if (instance.displayMode == "scoreOnTop")
-            {
+            else if (instance.displayMode == mode_scoreOnTop)
                 text.text = score + "\n" + judgment.text + "\n";
-                return;
-            }
-            text.text = judgment.text + "\n" + score + "\n";
+            else
+                text.text = judgment.text + "\n" + score + "\n";
         }
 
         public static Color toColor(float[] rgba)
