@@ -14,6 +14,7 @@ namespace HitScoreVisualizer
     {
         public static Config instance;
 
+        public const string mode_hardcoreCompetetive = "hardcoreCompetetive";
         public const string mode_format = "format";
         public const string mode_textOnly = "textOnly";
         public const string mode_numeric = "numeric";
@@ -386,7 +387,31 @@ namespace HitScoreVisualizer
                 color = toColor(judgment.color);
             }
 
-            if (instance.displayMode == mode_format)
+            //Hardcore Competetive Mode by wulkanat
+            if (instance.displayMode == mode_hardcoreCompetetive)
+            {
+                float beforeCut = noteCutInfo.swingRating;
+                float accuracy = 1f - Mathf.Clamp01(noteCutInfo.cutDistanceToCenter / 0.2f);
+                float afterCut = 0f;
+                if (saberAfterCutSwingRatingCounter != null)
+                    afterCutScore = saberAfterCutSwingRatingCounter.rating;
+
+                int beforeCutScore, accuracyScore, afterCutScore;
+                if (percentages)
+                {
+                    beforeCutScore = Mathf.Round(100f * beforeCut);
+                    accuracyScore = Mathf.Round(100f * accuracy);
+                    afterCutScore = Mathf.Round(100f * afterCut);
+                } else
+                {
+                    beforeCutScore = Mathf.RoundToInt(70f * beforeCut);
+                    accuracyScore = Mathf.RoundToInt(10f * accuracy);
+                    afterCutScore = Mathf.RoundToInt(30f * afterCut);
+                }
+
+
+            }
+            else if (instance.displayMode == mode_format)
             {
                 int beforeCutScore, accuracyScore, afterCutScore;
 
