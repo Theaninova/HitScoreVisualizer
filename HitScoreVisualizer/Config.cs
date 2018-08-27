@@ -361,6 +361,11 @@ namespace HitScoreVisualizer
             instance = DEFAULT_CONFIG;
         }
 
+        public static string floatToHexColor(float dec)
+        {
+            return ((int)(255f * dec)).ToString("X2");
+        }
+
         public static void judge(FlyingScoreTextEffect text, NoteCutInfo noteCutInfo, SaberAfterCutSwingRatingCounter saberAfterCutSwingRatingCounter, ref Color color, int score)
         {
             Judgment judgment = DEFAULT_JUDGMENT;
@@ -412,9 +417,9 @@ namespace HitScoreVisualizer
                     afterMax = 30;
                 }
 
-                beforeCutScore = Mathf.RoundToInt((float) beforeMax * beforeCut);
-                accuracyScore = Mathf.RoundToInt((float) accuracyMax * accuracy);
-                afterCutScore = Mathf.RoundToInt((float) afterMax * afterCut);
+                beforeCutScore = Mathf.RoundToInt(beforeMax * beforeCut);
+                accuracyScore = Mathf.RoundToInt(accuracyMax * accuracy);
+                afterCutScore = Mathf.RoundToInt(afterMax * afterCut);
 
                 if (beforeCutScore == beforeMax && accuracyScore == accuracyMax && afterCutScore == afterMax)
                 {
@@ -425,19 +430,21 @@ namespace HitScoreVisualizer
                 StringBuilder formattedBuilder = new StringBuilder();
 
                 if (beforeCutScore == beforeMax)
-                    formattedBuilder.Append("P | ");
+                    formattedBuilder.Append("<color=#FFFFFF>P ");
                 else
-                    formattedBuilder.Append(beforeCutScore + " | ");
+                    formattedBuilder.Append("<color=#" + floatToHexColor(beforeCut) + (floatToHexColor(1f - beforeCut) + "00>" + beforeCutScore + " ");
 
                 if (accuracyScore == accuracyMax)
-                    formattedBuilder.Append("P | ");
+                    formattedBuilder.Append("<color=#FFFFFF>P ");
                 else
-                    formattedBuilder.Append(accuracyScore + " | ");
+                    formattedBuilder.Append("<color=#" + floatToHexColor(accuracy) + floatToHexColor(1f - accuracy) + "00>" + accuracyScore + " ");
 
                 if (afterCutScore == accuracyMax)
-                    formattedBuilder.Append("P");
+                    formattedBuilder.Append("<color=#FFFFFF>P");
                 else
-                    formattedBuilder.Append(afterCutScore);
+                    formattedBuilder.Append("<color=#00FF00>" + afterCutScore);
+
+                formattedBuilder.Append("\n" + "<color=#" + floatToHexColor(afterCut) + floatToHexColor(1f - afterCut) + "00>" + score);
 
                 text.text = formattedBuilder.ToString();
             }
