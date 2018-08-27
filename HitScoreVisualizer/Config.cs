@@ -397,19 +397,48 @@ namespace HitScoreVisualizer
                     afterCutScore = saberAfterCutSwingRatingCounter.rating;
 
                 int beforeCutScore, accuracyScore, afterCutScore;
+                int beforeMax, accuracyMax, afterMax;
+
                 if (percentages)
                 {
-                    beforeCutScore = Mathf.Round(100f * beforeCut);
-                    accuracyScore = Mathf.Round(100f * accuracy);
-                    afterCutScore = Mathf.Round(100f * afterCut);
+                    beforeMax = 100;
+                    accuracyMax = 100;
+                    afterMax = 100;
                 } else
                 {
-                    beforeCutScore = Mathf.RoundToInt(70f * beforeCut);
-                    accuracyScore = Mathf.RoundToInt(10f * accuracy);
-                    afterCutScore = Mathf.RoundToInt(30f * afterCut);
+                    beforeMax = 70;
+                    accuracyMax = 10;
+                    afterMax = 30;
                 }
 
+                beforeCutScore = Mathf.Round((float) beforeMax * beforeCut);
+                accuracyScore = Mathf.Round((float) accuracyMax * accuracy);
+                afterCutScore = Mathf.Round((float) afterMax * afterCut);
 
+                if (beforeCutScore == beforeMax && accuracyScore == acMulti && afterCutScore == afterMax)
+                {
+                    text.text = "Perfect!";
+                    return;
+                }
+
+                StringBuilder formattedBuilder = new StringBuilder();
+
+                if (beforeCutScore == beforeMax)
+                    formattedBuilder.Append("P | ");
+                else
+                    formattedBuilder.Append(beforeCutScore + " | ");
+
+                if (accuracyScore == accuracyMax)
+                    formattedBuilder.Append("P | ");
+                else
+                    formattedBuilder.Append(accuracyScore + " | ");
+
+                if (afterCutScore == accuracyMax)
+                    formattedBuilder.Append("P");
+                else
+                    formattedBuilder.Append(afterCutScore);
+
+                text.text = formattedBuilder.ToString();
             }
             else if (instance.displayMode == mode_format)
             {
