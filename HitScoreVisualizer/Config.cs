@@ -394,7 +394,7 @@ namespace HitScoreVisualizer
                 float accuracy = 1f - Mathf.Clamp01(noteCutInfo.cutDistanceToCenter / 0.2f);
                 float afterCut = 0f;
                 if (saberAfterCutSwingRatingCounter != null)
-                    afterCutScore = saberAfterCutSwingRatingCounter.rating;
+                    afterCut = saberAfterCutSwingRatingCounter.rating;
 
                 int beforeCutScore, accuracyScore, afterCutScore;
                 int beforeMax, accuracyMax, afterMax;
@@ -404,18 +404,19 @@ namespace HitScoreVisualizer
                     beforeMax = 100;
                     accuracyMax = 100;
                     afterMax = 100;
-                } else
+                }
+                else
                 {
                     beforeMax = 70;
                     accuracyMax = 10;
                     afterMax = 30;
                 }
 
-                beforeCutScore = Mathf.Round((float) beforeMax * beforeCut);
-                accuracyScore = Mathf.Round((float) accuracyMax * accuracy);
-                afterCutScore = Mathf.Round((float) afterMax * afterCut);
+                beforeCutScore = Mathf.RoundToInt((float) beforeMax * beforeCut);
+                accuracyScore = Mathf.RoundToInt((float) accuracyMax * accuracy);
+                afterCutScore = Mathf.RoundToInt((float) afterMax * afterCut);
 
-                if (beforeCutScore == beforeMax && accuracyScore == acMulti && afterCutScore == afterMax)
+                if (beforeCutScore == beforeMax && accuracyScore == accuracyMax && afterCutScore == afterMax)
                 {
                     text.text = "Perfect!";
                     return;
