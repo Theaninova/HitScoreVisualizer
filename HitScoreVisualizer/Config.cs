@@ -31,7 +31,7 @@ namespace HitScoreVisualizer
         public const char format_indicatorChar = format_indicator;
         public const char format_lineBreak = 'n';
 
-        public const bool percentages = true;
+        public const bool percentages = false;
         public const int maxBeforeCutScore = 70;
         public const int maxAfterCutScore = 30;
         public const int maxAccuracyScore = 10;
@@ -423,7 +423,7 @@ namespace HitScoreVisualizer
 
                 if (beforeCutScore == beforeMax && accuracyScore == accuracyMax && afterCutScore == afterMax)
                 {
-                    text.text = "Perfect!";
+                    text.text = "Perfect";
                     return;
                 }
 
@@ -432,19 +432,19 @@ namespace HitScoreVisualizer
                 if (beforeCutScore == beforeMax)
                     formattedBuilder.Append("<color=#FFFFFF>P ");
                 else
-                    formattedBuilder.Append("<color=#" + floatToHexColor(beforeCut) + (floatToHexColor(1f - beforeCut) + "00>" + beforeCutScore + " ");
+                    formattedBuilder.Append("<color=#" + floatToHexColor(1f - beforeCut) + (floatToHexColor(beforeCut) + "00>" + beforeCutScore + " "));
 
                 if (accuracyScore == accuracyMax)
                     formattedBuilder.Append("<color=#FFFFFF>P ");
                 else
-                    formattedBuilder.Append("<color=#" + floatToHexColor(accuracy) + floatToHexColor(1f - accuracy) + "00>" + accuracyScore + " ");
+                    formattedBuilder.Append("<color=#" + floatToHexColor(1f - accuracy) + floatToHexColor(accuracy) + "00>" + accuracyScore + " ");
 
-                if (afterCutScore == accuracyMax)
+                if (afterCutScore == afterMax)
                     formattedBuilder.Append("<color=#FFFFFF>P");
                 else
-                    formattedBuilder.Append("<color=#00FF00>" + afterCutScore);
+                    formattedBuilder.Append("<color=#" + floatToHexColor(1f - afterCut) + floatToHexColor(afterCut) + "00>" + afterCutScore);
 
-                formattedBuilder.Append("\n" + "<color=#" + floatToHexColor(afterCut) + floatToHexColor(1f - afterCut) + "00>" + score);
+                formattedBuilder.Append("\n" + "<color=#" + floatToHexColor(1f - score / 110f) + floatToHexColor(score / 110f) + "00>" + score);
 
                 text.text = formattedBuilder.ToString();
             }
