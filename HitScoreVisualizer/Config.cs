@@ -31,7 +31,7 @@ namespace HitScoreVisualizer
         public const char format_indicatorChar = format_indicator;
         public const char format_lineBreak = 'n';
 
-        public const bool percentages = false;
+        public const bool percentages = true;
         public const int maxBeforeCutScore = 70;
         public const int maxAfterCutScore = 30;
         public const int maxAccuracyScore = 10;
@@ -429,6 +429,11 @@ namespace HitScoreVisualizer
 
                 StringBuilder formattedBuilder = new StringBuilder();
 
+                if (percentages)
+                    formattedBuilder.Append( "<color=#" + floatToHexColor(1f - score / 110f) + floatToHexColor(score / 110f) + "00>" + (int) ((score / 110f) * 100f) + "%\n");
+                else
+                    formattedBuilder.Append("<color=#" + floatToHexColor(1f - score / 110f) + floatToHexColor(score / 110f) + "00>" + score + "\n");
+
                 if (beforeCutScore == beforeMax)
                     formattedBuilder.Append("<color=#FFFFFF>P ");
                 else
@@ -443,8 +448,6 @@ namespace HitScoreVisualizer
                     formattedBuilder.Append("<color=#FFFFFF>P");
                 else
                     formattedBuilder.Append("<color=#" + floatToHexColor(1f - afterCut) + floatToHexColor(afterCut) + "00>" + afterCutScore);
-
-                formattedBuilder.Append("\n" + "<color=#" + floatToHexColor(1f - score / 110f) + floatToHexColor(score / 110f) + "00>" + score);
 
                 text.text = formattedBuilder.ToString();
             }
