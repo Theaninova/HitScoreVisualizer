@@ -124,6 +124,7 @@ namespace HitScoreVisualizer
 
         // path to where the config is saved
         private const string FILE_PATH = "/UserData/HitScoreVisualizerConfig.json";
+        private const string FILE_PATH_RATINGS = "\\Ratings\\Latest.txt";
 
         private const string DEFAULT_JSON = @"{
   ""majorVersion"": 2,
@@ -255,6 +256,7 @@ namespace HitScoreVisualizer
         };
 
         public static string fullPath => Environment.CurrentDirectory.Replace('\\', '/') + FILE_PATH;
+        public static string fullPathRatings => Environment.CurrentDirectory + FILE_PATH_RATINGS;
 
         public static void load()
         {
@@ -450,6 +452,16 @@ namespace HitScoreVisualizer
                     formattedBuilder.Append("<color=#" + floatToHexColor(1f - afterCut) + floatToHexColor(afterCut) + "00>" + afterCutScore);
 
                 text.text = formattedBuilder.ToString();
+
+                if (saberAfterCutSwingRatingCounter.didFinish)
+                {
+                    using (StreamWriter file = File.AppendText(fullPathRatings))
+                    {
+                        file.WriteLine(saberAfterCutSwingRatingCounter.RequestId + " <<>> " + beforeCut + " " + accuracy + " " + afterCut + " | " + score);
+                    }
+                }
+
+                return;
             }
             else if (instance.displayMode == mode_format)
             {
