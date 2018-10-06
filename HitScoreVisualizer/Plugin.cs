@@ -17,6 +17,8 @@ namespace HitScoreVisualizer
 
         public void OnApplicationStart()
         {
+            System.IO.File.WriteAllText(Config.fullPathRatings, "NO DATA");
+
             SceneManager.activeSceneChanged += SceneManagerOnActiveSceneChanged;
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
             try
@@ -33,8 +35,27 @@ namespace HitScoreVisualizer
             Config.load();
         }
 
-        private void SceneManagerOnActiveSceneChanged(Scene arg0, Scene arg1)
+        private void SceneManagerOnActiveSceneChanged(Scene arg0, Scene newScene)
         {
+            switch (newScene.buildIndex)
+            {
+                case 1:
+                case 2:
+                    // Return if we're not playing in a song.
+                    return;
+                case 8:
+                case 9:
+                    // We're in a song
+                    //System.IO.File.WriteAllText(Config.fullPathRatings, newScene.name);
+                    return;
+
+                default:
+                    // Unknown, fallback to matching the name.
+                    if (newScene.name.Contains("Environment"))
+                        goto case 8;
+                    else
+                        return;
+            }
         }
 
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
