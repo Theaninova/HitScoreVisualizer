@@ -453,13 +453,14 @@ namespace HitScoreVisualizer
 
                 text.text = formattedBuilder.ToString();
 
-                if (saberAfterCutSwingRatingCounter.didFinish)
+                //Feature doesn't work
+                /*if (saberAfterCutSwingRatingCounter.didFinish)
                 {
                     using (StreamWriter file = File.AppendText(fullPathRatings))
                     {
                         file.WriteLine(saberAfterCutSwingRatingCounter.RequestId + " <<>> " + beforeCut + " " + accuracy + " " + afterCut + " | " + score);
                     }
-                }
+                }*/
 
                 return;
             }
